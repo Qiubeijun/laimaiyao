@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar android:layout_width="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="?attr/actionBarSize">
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:id="@+id/layout_home_pager_bar"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/edt_search"
+                    android:layout_width="0dp"
+                    android:layout_height="31dp"
+                    android:layout_marginLeft="@dimen/horizontal_dimen_12dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/style_home_pager_toolbar_search_view"
+                    android:drawableLeft="@drawable/search"
+                    android:drawablePadding="@dimen/horizontal_dimen_10dp"
+                    android:gravity="center_vertical"
+                    android:hint="这里是一些字体"
+                    android:lines="1"
+                    android:paddingLeft="@dimen/horizontal_dimen_12dp"
+                    android:textColor="#737373"/>
+
+                <ImageView
+                    android:id="@+id/btn_notice_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:paddingLeft="@dimen/horizontal_dimen_12dp"
+                    android:paddingRight="@dimen/horizontal_dimen_12dp"
+                    android:src="@drawable/ic_notifications_black_24dp"/>
+        </LinearLayout>
+</android.support.v7.widget.Toolbar>

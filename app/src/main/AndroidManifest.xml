@@ -12,15 +12,25 @@
         android:allowBackup="true"
         android:icon="@drawable/drugstore"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/drugstore"
         android:networkSecurityConfig="@xml/network_security_config"
+        android:roundIcon="@drawable/drugstore"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".setttings.AddressManagementActivity"></activity>
+        <activity android:name=".setttings.UserInfoActivity" />
+        <activity android:name=".product.BrowsingHistoryActivity" />
+        <activity android:name=".product.WishListActivity" />
+        <activity android:name=".product.ProductListActivity" />
+        <activity android:name=".order.OrderCommentActivity" />
+        <activity android:name=".order.OrderDetailActivity" />
+        <activity android:name=".order.OrderListActivity" />
+        <activity android:name=".order.OrderConfirmationAcitivty" />
+
         <uses-library
             android:name="org.apache.http.legacy"
             android:required="false" />
 
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".setttings.SettingsActivity" />
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
@@ -29,23 +39,22 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
         <activity android:name=".login.ForgetPasswordActivity" />
         <activity android:name=".login.RegisterActivity" />
         <activity
             android:name=".login.LoginActivity"
-            android:label="登录">
-
-        </activity>
+            android:label="登录" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
-            android:noHistory="true"
-            android:launchMode="singleTask" >
+            android:launchMode="singleTask"
+            android:noHistory="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="101549286" />
             </intent-filter>
         </activity>
@@ -55,6 +64,5 @@
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
     </application>
-
 
 </manifest>

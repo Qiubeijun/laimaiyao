@@ -50,5 +50,6 @@
     </android.support.v7.widget.CardView>
 
     <include layout="@layout/order_tab"/>
-    <include layout="@layout/service_tab"/>
+    <include layout="@layout/service_tab"
+        android:id="@+id/service_tab"/>
 </LinearLayout>

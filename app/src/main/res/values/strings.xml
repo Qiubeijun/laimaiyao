@@ -11,6 +11,7 @@
     <string name="action_register">Register</string>
     <string name="title_login">Login</string>
     <string name="title_register">Register</string>
+    <string name="title_wish_list">WishList</string>
     <string name="title_settings">Settings</string>
     <string name="title_retrieve_password">Retrieve Password</string>
     <string name="error_invalid_email">This email address is invalid</string>

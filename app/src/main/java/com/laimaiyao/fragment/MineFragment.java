@@ -1,6 +1,7 @@
 package com.laimaiyao.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,8 +13,13 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.laimaiyao.R;
+import com.laimaiyao.product.BrowsingHistoryActivity;
+import com.laimaiyao.product.WishListActivity;
+import com.laimaiyao.setttings.UserInfoActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,6 +38,12 @@ public class MineFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private LinearLayout item_my_attention;
+    private LinearLayout item_browsing_history;
+    private LinearLayout item_my_healthy_info;
+    private LinearLayout item_call_server;
+    private ImageView imageView;
+    private View view;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -71,9 +83,43 @@ public class MineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-         View view = inflater.inflate(R.layout.fragment_mine, container, false);
+         view = inflater.inflate(R.layout.fragment_mine, container, false);
          Toolbar toolbar=view.findViewById(R.id.toolbar_mine);
          initToolbar(toolbar,"",false);
+         View view1=view.findViewById(R.id.service_tab);
+         item_my_attention = view1.findViewById(R.id.my_attention);
+         item_browsing_history = view1.findViewById(R.id.browsing_history);
+         item_my_healthy_info = view1.findViewById(R.id.my_healthy_information);
+         item_call_server = view1.findViewById(R.id.call_server);
+         item_my_attention.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View v) {
+                 Intent intent = new Intent(view.getContext(), WishListActivity.class);
+                 startActivity(intent);
+             }
+         });
+        item_my_healthy_info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(), UserInfoActivity.class);
+                startActivity(intent);
+            }
+        });
+        item_browsing_history.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(), BrowsingHistoryActivity.class);
+                startActivity(intent);
+            }
+        });
+        item_call_server.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(view.getContext(), WishListActivity.class);
+                startActivity(intent);
+            }
+        });
+
         return view;
     }
 

@@ -1,6 +1,7 @@
 package com.laimaiyao;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -23,6 +24,9 @@ import com.laimaiyao.fragment.SortFragment;
 import com.laimaiyao.product.ProductListActivity;
 import com.wyt.searchbox.SearchFragment;
 import com.wyt.searchbox.custom.IOnSearchClickListener;
+
+import site.gemus.openingstartanimation.LineDrawStrategy;
+import site.gemus.openingstartanimation.OpeningStartAnimation;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -84,6 +88,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        //Drawable app_icon=(Drawable)findViewById(R.mipmap.ic_launcher);
+         /*//开屏动画
+        OpeningStartAnimation openingStartAnimation = new OpeningStartAnimation.Builder(this)
+                .setDrawStategy(new LineDrawStrategy())
+                .setAppStatement("安心买，放心药！")
+                .setColorOfAppStatement(R.color.color_379A9D)
+                .create();
+        openingStartAnimation.show(this);*/
         //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);

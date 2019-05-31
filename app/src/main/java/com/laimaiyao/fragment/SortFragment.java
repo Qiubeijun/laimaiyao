@@ -1,109 +1,203 @@
 package com.laimaiyao.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import com.laimaiyao.App;
 import com.laimaiyao.R;
+import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
+import com.laimaiyao.model.ProductCategory;
+import com.laimaiyao.utils.ConfigConstants;
+import com.laimaiyao.utils.HttpUtil;
+import com.wyt.searchbox.SearchFragment;
+import com.wyt.searchbox.custom.IOnSearchClickListener;
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link SortFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link SortFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import kale.adapter.CommonAdapter;
+import kale.adapter.item.AdapterItem;
+import q.rorbin.verticaltablayout.VerticalTabLayout;
+import q.rorbin.verticaltablayout.adapter.TabAdapter;
+import q.rorbin.verticaltablayout.widget.ITabView;
+import q.rorbin.verticaltablayout.widget.TabView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+import static com.laimaiyao.utils.ConfigConstants.SORT_COLUMN;
+
 public class SortFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
-    //private OnFragmentInteractionListener mListener;
-
-    public SortFragment() {
-        // Required empty public constructor
-    }
-
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment SortFragment.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static SortFragment newInstance(String param1, String param2) {
-        SortFragment fragment = new SortFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
-    }
+    private VerticalTabLayout mVerticalTabLayout;
+    private GridView mGridView;
+    private View view;
+    private LinearLayout include;
+    private SearchFragment searchFragment;
+    private TextView textView;
+    private List<String> data_sort_column = new ArrayList<String>();
+    private List<ProductCategory> data_sub_sort = new ArrayList<ProductCategory>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_sort, container, false);
+        view = inflater.inflate(R.layout.fragment_sort, container, false);
+        data_sort_column.clear();
+        data_sort_column.addAll(Arrays.asList(SORT_COLUMN.split(",")));
+        InitView();
+        return view;
     }
 
-    // TODO: Rename method, update argument and hook method into UI event
-  /*  public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
+    private void InitView() {
+        include = view.findViewById(R.id.search_layout_sort);
+        textView = include.findViewById(R.id.edt_search);
+        searchFragment = SearchFragment.newInstance();
+        searchFragment.setOnSearchClickListener(new IOnSearchClickListener() {
+            @Override
+            public void OnSearchClick(String keyword) {
+                ARouter.getInstance()
+                        .build(ConfigConstants.RESULT)
+                        .withString("Search_Key",keyword)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchFragment.showFragment(getChildFragmentManager(),SearchFragment.TAG);
+            }
+        });
+        mVerticalTabLayout = view.findViewById(R.id.VerticalTabLayout);
+        mVerticalTabLayout.setTabAdapter(new TabAdapter() {
+            @Override
+            public int getCount() {
+                return data_sort_column.size();
+            }
+
+            @Override
+            public ITabView.TabBadge getBadge(int position) {
+                return null;
+            }
+
+            @Override
+            public ITabView.TabIcon getIcon(int position) {
+                return null;
+            }
+
+            @Override
+            public ITabView.TabTitle getTitle(int position) {
+                return new ITabView.TabTitle.Builder().setContent(data_sort_column.get(position)).build();
+            }
+
+            @Override
+            public int getBackground(int position) {
+                return 0;
+            }
+        });
+        mGridView = view.findViewById(R.id.gridview);
+        requestsort(1,String.valueOf(0));
+        mVerticalTabLayout.addOnTabSelectedListener(new VerticalTabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabView tab, int position) {
+                if(position==0){
+                    requestsort(1,String.valueOf(position));
+                }else {
+                    requestsort(1,String.valueOf(position));
+                }
+            }
+
+            @Override
+            public void onTabReselected(TabView tab, int position) {}
+        });
+    }
+
+    private boolean requestsort(int ishot, String ParentID) {
+
+        if (HttpUtil.isNetworkAvailable(getContext())) {
+            Map<String, String> map = new HashMap<>();
+            map.put("ishot", String.valueOf(ishot));
+            map.put("parentID", ParentID);
+            String token = SPUtils.getInstance().getString("token",null);
+            HttpUtil.getMethodWithToken("/sort",token,map,new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+                    int code = response.code();
+                    if (code == 200){
+                        ToastUtils.showShort(response.body());
+                        List<ProductCategory> productCategories = new Gson().fromJson(response.body(),new TypeToken<List<ProductCategory>>(){}.getType());
+                        data_sub_sort.clear();
+                        data_sub_sort.addAll(productCategories);
+                        mGridView.setAdapter(new CommonAdapter<ProductCategory>(data_sub_sort,1) {
+                            public AdapterItem<ProductCategory> createItem(Object type) {
+                                return new TextItem();
+                            }
+                        });
+                    }
+                    else if (code == 300){ }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    Toast.makeText(App.getContext(), "--" + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+            return true;
+        }
+        else
+            return false;
+    }
+    public class TextItem implements AdapterItem<ProductCategory> {
+
+        @Override
+        public int getLayoutResId() {
+            return R.layout.item_sort;
+        }
+
+        TextView textView;
+        CircleImageView mCircleImageView;
+        LinearLayout mLinearLayout;
+
+        @Override
+        public void bindViews(View root) {
+            textView = root.findViewById(R.id.tv_sort_item);
+            mCircleImageView = root.findViewById(R.id.img_sort_item);
+            mLinearLayout = root.findViewById(R.id.linear_item_sort);
+        }
+
+        @Override
+        public void handleData(final ProductCategory model, int position) {
+
+            textView.setText(model.getCategoryName());
+            mCircleImageView.setImageResource(R.drawable.ic_pic);
+            mLinearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ARouter.getInstance()
+                            .build(ConfigConstants.RESULT)
+                            .withString("Search_Key",model.getCategoryName())
+                            .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+                }
+            });
+        }
+        @Override
+        public void setViews() {
+
         }
     }
-*/
-    /*@Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    *//**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     *//*
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
 }

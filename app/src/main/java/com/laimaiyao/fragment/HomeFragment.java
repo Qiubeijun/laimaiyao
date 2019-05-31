@@ -1,14 +1,20 @@
 package com.laimaiyao.fragment;
 
-import android.content.Context;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.laimaiyao.App;
 import com.laimaiyao.R;
+import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
+import com.laimaiyao.utils.ConfigConstants;
+import com.wyt.searchbox.SearchFragment;
+import com.wyt.searchbox.custom.IOnSearchClickListener;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -27,6 +33,11 @@ public class HomeFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private LinearLayout include;
+    private SearchFragment searchFragment;
+    private TextView textView;
+    private View view;
+
 
     //private OnFragmentInteractionListener mListener;
 
@@ -65,7 +76,31 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        view =inflater.inflate(R.layout.fragment_home, container, false);
+        include = view.findViewById(R.id.search_layout_home);
+        textView = include.findViewById(R.id.edt_search);
+        searchFragment = SearchFragment.newInstance();
+        searchFragment.setOnSearchClickListener(new IOnSearchClickListener() {
+            @Override
+            public void OnSearchClick(String keyword) {
+                ARouter.getInstance()
+                        .build(ConfigConstants.RESULT)
+                        .withString("Search_Key",keyword)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+
+                /*Intent intent = new Intent(MainActivity.this, ProductListActivity.class);
+                startActivity(intent);*/
+                //这里处理逻辑
+                //Toast.makeText(ToolBarActivity.this, keyword, Toast.LENGTH_SHORT).show();
+            }
+        });
+        textView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                searchFragment.showFragment(getChildFragmentManager(),SearchFragment.TAG);
+            }
+        });
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event

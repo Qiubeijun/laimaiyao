@@ -24,7 +24,7 @@
                     android:drawableLeft="@drawable/search"
                     android:drawablePadding="@dimen/horizontal_dimen_10dp"
                     android:gravity="center_vertical"
-                    android:hint="这里是一些字体"
+                    android:hint="请输入商品名称"
                     android:lines="1"
                     android:paddingLeft="@dimen/horizontal_dimen_12dp"
                     android:textColor="#737373"/>

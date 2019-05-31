@@ -5,35 +5,60 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+    <include layout="@layout/toolbar"
+        android:id="@+id/search_layout_sort" />
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <q.rorbin.verticaltablayout.VerticalTabLayout
+            android:id="@+id/VerticalTabLayout"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            android:scrollIndicators="bottom"
+            android:fitsSystemWindows="true"
+            app:indicator_width="2dp"
+            android:background="#EDEDED"
+            app:indicator_color="@color/white"
+            app:indicator_gravity="fill"
+            app:tab_height="50dp"
+            app:tab_mode="scrollable">
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-    <q.rorbin.verticaltablayout.VerticalTabLayout
-        android:id="@+id/tablayout"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:scrollIndicators="bottom"
-        android:fitsSystemWindows="true"
-        app:indicator_corners="5dp"
-        app:indicator_width="2dp"
-        android:background="#EDEDED"
-        app:indicator_color="@color/white"
-        app:indicator_gravity="fill"
-        app:tab_height="50dp"
-        app:tab_mode="scrollable">
+        </q.rorbin.verticaltablayout.VerticalTabLayout>
 
-    </q.rorbin.verticaltablayout.VerticalTabLayout>
+        <LinearLayout
+            android:id="@+id/scroll_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:layout_weight="1" >
+                <android.support.v7.widget.CardView
+                    android:id="@+id/card_ad"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="100dp"
+                        />
+                </android.support.v7.widget.CardView>
 
-    <com.laimaiyao.pager.VerticalPager
-        android:id="@+id/viewpager"
-        android:layout_width="0dp"
-        android:layout_height="match_parent"
-        android:layout_weight="4">
+                <GridView
+                    android:id="@+id/gridview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:horizontalSpacing="10dp"
+                    android:nestedScrollingEnabled="true"
+                    android:numColumns="3"
+                    android:verticalSpacing="10dp">
 
-    </com.laimaiyao.pager.VerticalPager>
-</LinearLayout>
+                </GridView>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

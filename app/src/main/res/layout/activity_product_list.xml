@@ -1,9 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".product.ProductListActivity">
+    android:orientation="vertical"
+    tools:context=".activity.product.ProductListActivity">
 
-</android.support.constraint.ConstraintLayout>
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar_product"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/edt_search"
+            android:layout_width="250dp"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:background="@drawable/style_home_pager_toolbar_search_view"
+            android:drawableLeft="@drawable/search"
+            android:drawablePadding="@dimen/horizontal_dimen_10dp"
+            android:gravity="start"
+            android:hint="请输入商品名称"
+            android:lines="1"
+            android:paddingLeft="@dimen/horizontal_dimen_12dp"
+            android:textColor="#737373" />
+
+        <ImageView
+            android:id="@+id/btn_notice_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:paddingLeft="@dimen/horizontal_dimen_12dp"
+            android:paddingRight="@dimen/horizontal_dimen_12dp"
+            android:src="@drawable/ic_notifications_black_24dp" />
+    </android.support.v7.widget.Toolbar>
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/rl_product_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_product_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+        </android.support.v7.widget.RecyclerView>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
+
+
+</LinearLayout>

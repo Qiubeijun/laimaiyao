@@ -1,25 +1,35 @@
 package com.laimaiyao.fragment;
 
-import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.util.SPUtils;
+import com.laimaiyao.App;
 import com.laimaiyao.R;
-import com.laimaiyao.product.BrowsingHistoryActivity;
-import com.laimaiyao.product.WishListActivity;
-import com.laimaiyao.setttings.UserInfoActivity;
+import com.laimaiyao.activity.login.LoginActivity;
+import com.laimaiyao.activity.setttings.SettingsActivity;
+import com.laimaiyao.activity.setttings.UserInfoActivity;
+import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
+import com.laimaiyao.utils.ConfigConstants;
+import com.laimaiyao.utils.HttpUtil;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,8 +52,20 @@ public class MineFragment extends Fragment {
     private LinearLayout item_browsing_history;
     private LinearLayout item_my_healthy_info;
     private LinearLayout item_call_server;
-    private ImageView imageView;
+    private LinearLayout item_order_pay;
+    private LinearLayout item_order_prepare;
+    private LinearLayout item_order_receive;
+    private LinearLayout item_order_review;
+    private LinearLayout item_order_refund;
+    private RelativeLayout order_all;
     private View view;
+    private View orderTab;
+    private View serviceTab;
+    private Toolbar toolbar;
+    private CardView userinfo;
+    private CircleImageView user_avatar;
+    private TextView user_nickname;
+    private Button bt_settings;
 
     //private OnFragmentInteractionListener mListener;
 
@@ -84,20 +106,88 @@ public class MineFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
          view = inflater.inflate(R.layout.fragment_mine, container, false);
-         Toolbar toolbar=view.findViewById(R.id.toolbar_mine);
-         initToolbar(toolbar,"",false);
-         View view1=view.findViewById(R.id.service_tab);
-         item_my_attention = view1.findViewById(R.id.my_attention);
-         item_browsing_history = view1.findViewById(R.id.browsing_history);
-         item_my_healthy_info = view1.findViewById(R.id.my_healthy_information);
-         item_call_server = view1.findViewById(R.id.call_server);
-         item_my_attention.setOnClickListener(new View.OnClickListener() {
-             @Override
-             public void onClick(View v) {
-                 Intent intent = new Intent(view.getContext(), WishListActivity.class);
-                 startActivity(intent);
-             }
-         });
+         initview();
+        return view;
+    }
+
+    private void initview(){
+        userinfo = view.findViewById(R.id.card_user_info);
+        user_nickname = view.findViewById(R.id.tv_nickname);
+        toolbar = view.findViewById(R.id.toolbar_mine);
+        initToolbar(toolbar,"",false);
+        orderTab = view.findViewById(R.id.order_tab);
+        serviceTab = view.findViewById(R.id.service_tab);
+        order_all = orderTab.findViewById(R.id.order_all);
+        item_order_pay = orderTab.findViewById(R.id.order_pay);
+        item_order_prepare = orderTab.findViewById(R.id.order_prepare);
+        item_order_receive = orderTab.findViewById(R.id.order_receive);
+        item_order_review = orderTab.findViewById(R.id.order_review);
+        item_order_refund = orderTab.findViewById(R.id.order_refund);
+        item_my_attention = serviceTab.findViewById(R.id.my_attention);
+        item_browsing_history = serviceTab.findViewById(R.id.browsing_history);
+        item_my_healthy_info = serviceTab.findViewById(R.id.my_healthy_information);
+        item_call_server = serviceTab.findViewById(R.id.call_server);
+        if(HttpUtil.Islogined()){
+            user_nickname.setText(SPUtils.getInstance().getString("nickname"));
+        }
+        userinfo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (HttpUtil.Islogined()){
+
+                } else {
+                    Intent intent = new Intent();
+                    intent.setClass(App.getContext(), LoginActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
+        order_all.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ConfigConstants.ORDERLIST)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
+        item_order_pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ConfigConstants.ORDERLIST)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
+        item_order_prepare.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ConfigConstants.ORDERLIST)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
+        item_order_receive.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ConfigConstants.ORDERLIST)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
+        item_order_review.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ConfigConstants.ORDERLIST)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
+        item_order_refund.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { }
+        });
+        item_my_attention.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance().build(ConfigConstants.WISHLIST)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
         item_my_healthy_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -108,65 +198,34 @@ public class MineFragment extends Fragment {
         item_browsing_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), BrowsingHistoryActivity.class);
-                startActivity(intent);
+                ARouter.getInstance().build(ConfigConstants.HISTORY)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
             }
         });
         item_call_server.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), WishListActivity.class);
-                startActivity(intent);
+                ARouter.getInstance().build(ConfigConstants.ADDRESS)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
             }
         });
-
-        return view;
     }
-
-    // TODO: Rename method, update argument and hook method into UI event
-    /*public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (context instanceof OnFragmentInteractionListener) {
-            mListener = (OnFragmentInteractionListener) context;
-        } else {
-            throw new RuntimeException(context.toString()
-                    + " must implement OnFragmentInteractionListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    *//**
-     * This interface must be implemented by activities that contain this
-     * fragment to allow an interaction in this fragment to be communicated
-     * to the activity and potentially other fragments contained in that
-     * activity.
-     * <p>
-     * See the Android Training lesson <a href=
-     * "http://developer.android.com/training/basics/fragments/communicating.html"
-     * >Communicating with Other Fragments</a> for more information.
-     *//*
-    public interface OnFragmentInteractionListener {
-        // TODO: Update argument type and name
-        void onFragmentInteraction(Uri uri);
-    }*/
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.mine,menu);
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()==R.id.settings) {
+            Intent intent = new Intent(App.getContext(), SettingsActivity.class);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     /**
      * Fragment中初始化Toolbar
      * @param toolbar
@@ -180,6 +239,22 @@ public class MineFragment extends Fragment {
         if (actionBar != null) {
             actionBar.setTitle(title);
             actionBar.setDisplayHomeAsUpEnabled(isDisplayHomeAsUp);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (HttpUtil.Islogined()){
+            user_nickname.setText(SPUtils.getInstance().getString("nickname"));
+        }
+        else {
+            user_nickname.setText("登录/注册");
         }
     }
 }

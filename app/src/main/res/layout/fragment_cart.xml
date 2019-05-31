@@ -3,28 +3,55 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
+
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar_cart"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
+
         <TextView
             android:id="@+id/toolbar_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:text="购物车"
-            android:textSize="20sp"
-            android:textColor="#000000"/>
+            android:text="@string/title_cart"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_header_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="编辑"
+            android:layout_marginEnd="20dp"
+            android:textColor="@color/black"
+            android:layout_gravity="right"
+            android:textSize="20sp" />
     </android.support.v7.widget.Toolbar>
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/cart_list"
+
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1">
 
-    </android.support.v7.widget.RecyclerView>
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_cart_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+        </android.support.v7.widget.RecyclerView>
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -46,10 +73,11 @@
             android:checkMark="?android:attr/listChoiceIndicatorMultiple"
             android:gravity="center"
             android:paddingLeft="10dp"
-            android:scaleX="0.6"
-            android:scaleY="0.6"
+            android:button="@drawable/checkbox_style"
+            android:scaleX="0.8"
+            android:scaleY="0.8"
             android:text="全选"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
@@ -61,6 +89,7 @@
             android:gravity="center"
             android:padding="5dp"
             android:text="合计:￥0.00"
+            android:textSize="20sp"
             android:textColor="#000000" />
         <TextView
             android:id="@+id/tv_settlement"
@@ -69,7 +98,17 @@
             android:layout_alignParentRight="true"
             android:background="@color/red"
             android:gravity="center"
-            android:text="去结算(0)"
+            android:text="去结算"
             android:textColor="@color/white" />
+        <TextView
+            android:id="@+id/tv_cart_delete"
+            android:layout_width="80dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:background="@color/red"
+            android:gravity="center"
+            android:text="删除"
+            android:textColor="@color/white"
+            android:visibility="gone"/>
     </RelativeLayout>
 </LinearLayout>

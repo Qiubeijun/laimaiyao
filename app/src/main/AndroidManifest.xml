@@ -7,8 +7,11 @@
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
+        android:name=".App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -16,23 +19,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".setttings.AddressManagementActivity"></activity>
-        <activity android:name=".setttings.UserInfoActivity" />
-        <activity android:name=".product.BrowsingHistoryActivity" />
-        <activity android:name=".product.WishListActivity" />
-        <activity android:name=".product.ProductListActivity" />
-        <activity android:name=".order.OrderCommentActivity" />
-        <activity android:name=".order.OrderDetailActivity" />
-        <activity android:name=".order.OrderListActivity" />
-        <activity android:name=".order.OrderConfirmationAcitivty" />
-
-        <uses-library
-            android:name="org.apache.http.legacy"
-            android:required="false" />
-
-        <activity android:name=".setttings.SettingsActivity" />
+        <activity android:name=".activity.product.ProductDetailActivity"></activity>
+        <activity android:name=".activity.BaseActivity" />
+        <activity android:name=".activity.setttings.AddressManagementActivity" />
+        <activity android:name=".activity.setttings.UserInfoActivity" />
+        <activity android:name=".activity.product.BrowsingHistoryActivity" />
+        <activity android:name=".activity.product.WishListActivity" />
+        <activity android:name=".activity.product.ProductListActivity" />
+        <activity android:name=".activity.order.OrderCommentActivity" />
+        <activity android:name=".activity.order.OrderDetailActivity" />
+        <activity android:name=".activity.order.OrderListActivity" />
+        <activity android:name=".activity.order.OrderConfirmationAcitivty" />
+        <activity android:name=".activity.setttings.SettingsActivity" />
+        <activity android:name=".activity.login.ForgetPasswordActivity" />
+        <activity android:name=".activity.login.RegisterActivity" />
         <activity
-            android:name=".MainActivity"
+            android:name=".activity.MainActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -40,11 +42,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.ForgetPasswordActivity" />
-        <activity android:name=".login.RegisterActivity" />
         <activity
-            android:name=".login.LoginActivity"
-            android:label="登录" />
+            android:name=".activity.login.LoginActivity"
+            android:label="登录"></activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -63,6 +63,10 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+
+        <uses-library
+            android:name="org.apache.http.legacy"
+            android:required="false" />
     </application>
 
 </manifest>

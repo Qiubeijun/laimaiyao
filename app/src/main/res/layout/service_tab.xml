@@ -11,7 +11,8 @@
         android:id="@+id/service_tab_linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="10dp">
+        android:padding="10dp"
+        >
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -87,13 +88,13 @@
                 android:layout_height="50dp"
                 android:padding="10dp"
                 android:layout_gravity="center"
-                android:src="@drawable/icon_daifukuan">
+                android:src="@drawable/ic_address">
             </ImageView>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="联系客服"
+                android:text="管理地址"
                 android:textColor="#000000"
                 android:textSize="10sp"/>
         </LinearLayout>

@@ -5,6 +5,5 @@
             <corners android:radius="@dimen/horizontal_dimen_20dp"/>
             <solid android:color="@color/graywhite" />
         </shape>
-
     </item>
 </layer-list>

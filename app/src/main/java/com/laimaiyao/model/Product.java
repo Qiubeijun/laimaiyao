@@ -17,6 +17,7 @@ public class Product {
     private String Brand;
     private String Specification;
 
+
     public String getSpecification() {
         return Specification;
     }

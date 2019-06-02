@@ -19,9 +19,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.product.ProductDetailActivity"></activity>
+        <activity android:name=".activity.address.AddressEditActivity"></activity>
+        <activity android:name=".activity.CartActivity" />
+        <activity android:name=".activity.product.ProductDetailActivity" />
         <activity android:name=".activity.BaseActivity" />
-        <activity android:name=".activity.setttings.AddressManagementActivity" />
+        <activity android:name=".activity.address.AddressManagementActivity" />
         <activity android:name=".activity.setttings.UserInfoActivity" />
         <activity android:name=".activity.product.BrowsingHistoryActivity" />
         <activity android:name=".activity.product.WishListActivity" />
@@ -44,7 +46,7 @@
         </activity>
         <activity
             android:name=".activity.login.LoginActivity"
-            android:label="登录"></activity>
+            android:label="登录" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

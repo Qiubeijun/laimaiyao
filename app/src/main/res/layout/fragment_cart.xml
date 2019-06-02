@@ -98,7 +98,7 @@
             android:layout_alignParentRight="true"
             android:background="@color/red"
             android:gravity="center"
-            android:text="去结算"
+            android:text="去结算(0)"
             android:textColor="@color/white" />
         <TextView
             android:id="@+id/tv_cart_delete"

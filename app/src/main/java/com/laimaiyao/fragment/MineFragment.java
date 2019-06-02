@@ -20,11 +20,11 @@ import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.laimaiyao.App;
 import com.laimaiyao.R;
 import com.laimaiyao.activity.login.LoginActivity;
 import com.laimaiyao.activity.setttings.SettingsActivity;
-import com.laimaiyao.activity.setttings.UserInfoActivity;
 import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
 import com.laimaiyao.utils.ConfigConstants;
 import com.laimaiyao.utils.HttpUtil;
@@ -191,15 +191,16 @@ public class MineFragment extends Fragment {
         item_my_healthy_info.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(view.getContext(), UserInfoActivity.class);
-                startActivity(intent);
+                ToastUtils.showShort("敬请期待");
             }
         });
         item_browsing_history.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ARouter.getInstance().build(ConfigConstants.HISTORY)
-                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+                /*ARouter.getInstance().build(ConfigConstants.HISTORY)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());*/
+                ToastUtils.showShort("敬请期待");
+
             }
         });
         item_call_server.setOnClickListener(new View.OnClickListener() {

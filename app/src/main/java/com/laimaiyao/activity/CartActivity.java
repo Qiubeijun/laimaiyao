@@ -1,21 +1,21 @@
-package com.laimaiyao.fragment;
+package com.laimaiyao.activity;
 
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.SparseArray;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.SPUtils;
 import com.blankj.utilcode.util.ToastUtils;
@@ -24,7 +24,6 @@ import com.google.gson.reflect.TypeToken;
 import com.laimaiyao.App;
 import com.laimaiyao.R;
 import com.laimaiyao.adapter.CartAdapter;
-import com.laimaiyao.adapter.OneAdapter;
 import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
 import com.laimaiyao.model.CartItem;
 import com.laimaiyao.utils.ConfigConstants;
@@ -40,10 +39,9 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//@Route(path = ConfigConstants.CART)
-public class CartFragment extends Fragment implements CartAdapter.CheckInterface,CartAdapter.ModifyCountInterface,View.OnClickListener{
-    // TODO: Rename parameter arguments, choose names that match
-    private View view;
+@Route(path = ConfigConstants.CART)
+public class CartActivity extends AppCompatActivity implements View.OnClickListener,CartAdapter.CheckInterface, CartAdapter.ModifyCountInterface {
+
     private Toolbar toolbar;
     private TextView tv_edit;//编辑按钮
     private TextView tv_settlement;//结算按钮
@@ -51,7 +49,6 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
     private RecyclerView recyclerView;
     private TextView tv_show_price;//合计价格
 
-    private OneAdapter oneAdapter;
     private CartAdapter cartAdapter;
     private ProgressBar progressBar;
     private double totalPrice = 0.00;// 购买的商品总价
@@ -63,45 +60,51 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
     private List<CartItem> datas =new ArrayList<CartItem>();
     private CartItem currentCart;
     private View getView;
-
-
-    /**
-     * 批量模式下，用来记录当前选中状态
-     */
-
+    private int touch_position;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_cart, container, false);
-        ARouter.getInstance().inject(this);
-        InitView(view);
-
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_cart);
+        InitView();
         InitData();
-        return view;
     }
     private void InitData(){
         progressBar.setVisibility(View.VISIBLE);
         getCart();
     }
-    private void InitView( View  view1){
-        progressBar = view1.findViewById(R.id.progressBar);
-        checkBox = view1.findViewById(R.id.ck_all);
-        toolbar = view1.findViewById(R.id.toolbar_cart);
-        tv_settlement = view1.findViewById(R.id.tv_settlement);
-        tv_cart_delete = view1.findViewById(R.id.tv_cart_delete);
+    private void InitView(){
+        toolbar = findViewById(R.id.toolbar_cart);
+        InitToolBar(toolbar);
+        progressBar = findViewById(R.id.progressBar);
+        checkBox = findViewById(R.id.ck_all);
+        toolbar = findViewById(R.id.toolbar_cart);
+        tv_settlement = findViewById(R.id.tv_settlement);
+        tv_cart_delete = findViewById(R.id.tv_cart_delete);
         tv_settlement.setOnClickListener(this);
         tv_cart_delete.setOnClickListener(this);
         tv_edit = toolbar.findViewById(R.id.tv_header_right);
         tv_edit.setOnClickListener(this);
-        tv_show_price = view1.findViewById(R.id.tv_show_price);
-        recyclerView = view1.findViewById(R.id.rv_cart_list);
-
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(view.getContext()));
-        cartAdapter = new CartAdapter(view1.getContext());
+        tv_show_price = findViewById(R.id.tv_show_price);
+        recyclerView =findViewById(R.id.rv_cart_list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        cartAdapter = new CartAdapter(CartActivity.this);
         cartAdapter.setCheckInterface(this);
         cartAdapter.setModifyCountInterface(this);
         recyclerView.setAdapter(cartAdapter);
         checkBox.setOnClickListener(this);
+    }
+    private void InitToolBar(android.support.v7.widget.Toolbar toolbar){
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayShowTitleEnabled(false);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
     }
 
     /**
@@ -138,11 +141,11 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
     }
 
     /**
-     * 增加 
+     * 增加
      *
-     * @param position      组元素位置 
-     * @param showCountView 用于展示变化后数量的View 
-     * @param isChecked     子元素选中与否 
+     * @param position      组元素位置
+     * @param showCountView 用于展示变化后数量的View
+     * @param isChecked     子元素选中与否
      */
     @Override
     public void doIncrease(int position, View showCountView, boolean isChecked) {
@@ -159,43 +162,38 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
     }
 
     /**
-     * 删减 
+     * 删减
      *
-     * @param position      组元素位置 
-     * @param showCountView 用于展示变化后数量的View 
-     * @param isChecked     子元素选中与否 
+     * @param position      组元素位置
+     * @param showCountView 用于展示变化后数量的View
+     * @param isChecked     子元素选中与否
      */
     @Override
     public void doDecrease(int position, View showCountView, boolean isChecked) {
-        CartItem mCartItem = datas.get(position);
-        CurrentCount = 0;
-        int currentCount = mCartItem.getAmount();
-        if (currentCount == 1) {
+        currentCart = datas.get(position);
+        getView = showCountView;
+        CurrentCount = currentCart.getAmount();
+        if (CurrentCount == 1) {
             ToastUtils.showShort("不能再减了");
             //((TextView) showCountView).setEnabled(false);
             return;
         }
+        progressBar.setVisibility(View.VISIBLE);
         ItemSub(currentCart.getPID());
 
-        currentCount--;
-        ToastUtils.showShort(currentCount);
-        mCartItem.setAmount(currentCount);
-        ((TextView) showCountView).setText(currentCount + "");
-        cartAdapter.notifyDataSetChanged();
-        statistics();
 
     }
 
     /**
-     * 删除 
+     * 删除
      *
      * @param position
      */
     @Override
     public void childDelete(int position) {
-        datas.remove(position);
-        cartAdapter.notifyDataSetChanged();
-        statistics();
+        progressBar.setVisibility(View.VISIBLE);
+        touch_position = position;
+        ItemDel(datas.get(position).getPID());
     }
 
     @Override
@@ -245,13 +243,13 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
                             .navigation(App.getContext(), new LoginNavigationCallbackImpl());
                 }
                 break;
-                //删除按钮
+            //删除按钮
             case R.id.tv_cart_delete:
                 if(totalCount==0){
                     ToastUtils.showShort("请选中需要删除的商品");
                 }
                 else {
-                    AlertDialog alert = new AlertDialog.Builder(view.getContext()).create();
+                    AlertDialog alert = new AlertDialog.Builder(this).create();
                     alert.setTitle("操作提示");
                     alert.setMessage("您确定要将这些商品从购物车中移除吗？");
                     alert.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
@@ -278,10 +276,10 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
     }
 
     /**
-     * 统计操作 
-     * 1.先清空全局计数器<br> 
-     * 2.遍历所有子元素，只要是被选中状态的，就进行相关的计算操作 
-     * 3.给底部的textView进行数据填充 
+     * 统计操作
+     * 1.先清空全局计数器<br>
+     * 2.遍历所有子元素，只要是被选中状态的，就进行相关的计算操作
+     * 3.给底部的textView进行数据填充
      */
     public void statistics() {
         totalCount = 0;
@@ -359,7 +357,7 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
                         progressBar.setVisibility(View.GONE);
                         CurrentCount++;
                         currentCart.setAmount(CurrentCount);
-                        ((TextView) getView).setText(CurrentCount + "");
+                        //((TextView) getView).setText(CurrentCount + "");
                         cartAdapter.notifyDataSetChanged();
                         statistics();
 
@@ -391,6 +389,11 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
 
                     if(response.code()==200){
                         progressBar.setVisibility(View.GONE);
+                        CurrentCount--;
+                        currentCart.setAmount(CurrentCount);
+                        //((TextView) getView).setText(CurrentCount + "");
+                        cartAdapter.notifyDataSetChanged();
+                        statistics();
                     }
                     else if (response.code()==300){
                         Toast.makeText(App.getContext(), "--"+response.body(), Toast.LENGTH_SHORT).show();
@@ -417,7 +420,6 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
 
                     if(response.code()==200){
                         progressBar.setVisibility(View.GONE);
-
                     }
                     else if (response.code()==300){
                         Toast.makeText(App.getContext(), "--"+response.body(), Toast.LENGTH_SHORT).show();
@@ -446,6 +448,11 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
 
                     if(response.code()==200){
                         progressBar.setVisibility(View.GONE);
+                        datas.remove(touch_position);
+                        cartAdapter.setData(datas);
+                        cartAdapter.notifyDataSetChanged();
+                        ToastUtils.showShort("已删除");
+                        statistics();
 
                     }
                     else if (response.code()==300){
@@ -488,5 +495,4 @@ public class CartFragment extends Fragment implements CartAdapter.CheckInterface
             });
         }
     }
-
 }

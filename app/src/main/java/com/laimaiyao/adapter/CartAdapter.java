@@ -1,9 +1,7 @@
 package com.laimaiyao.adapter;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.annotation.NonNull;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,8 +11,13 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.blankj.utilcode.util.ToastUtils;
+import com.laimaiyao.App;
 import com.laimaiyao.R;
+import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
 import com.laimaiyao.model.CartItem;
+import com.laimaiyao.utils.ConfigConstants;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,21 +62,22 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>  {
         this.modifyCountInterface = modifyCountInterface;
     }
 
+
     class ViewHolder extends RecyclerView.ViewHolder {
         CardView cardView;
         TextView name;
         TextView price;
         TextView amount;
-        Button reduce;
+        Button sub;
         Button add;
         CheckBox checkBox;
 
         public ViewHolder(View view) {
             super(view);
-            cardView = (CardView) view;
+            cardView = view.findViewById(R.id.card_cart);
             name =  view.findViewById(R.id.tv_commodity_name);
             price = view.findViewById(R.id.tv_cart_price);
-            reduce =  view.findViewById(R.id.button_sub);
+            sub =  view.findViewById(R.id.button_sub);
             add =  view.findViewById(R.id.button_add);
             amount =  view.findViewById(R.id.amount_cart_count);
             checkBox = view.findViewById(R.id.ck_chose);
@@ -90,6 +94,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>  {
         View view = LayoutInflater.from(mContext)
                 .inflate(R.layout.item_cart, parent, false);
         final ViewHolder holder = new ViewHolder(view);
+        //final int position = holder.getAdapterPosition();
 
         //单选框按钮
         holder.checkBox.setOnClickListener(
@@ -110,42 +115,41 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>  {
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 CartItem mCartItem = mCartItemList.get(position);
-                modifyCountInterface.doIncrease(position, holder.amount, holder.checkBox.isChecked());//暴露增加接口
+                ToastUtils.showShort("add");
+                //暴露增加接口
+                modifyCountInterface.doIncrease(position, holder.amount, holder.checkBox.isChecked());
 
             }
         });
-        //add图标单机事件
-        holder.reduce.setOnClickListener(new View.OnClickListener() {
+        //sub图标单机事件
+
+        holder.sub.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 int position = holder.getAdapterPosition();
                 CartItem mCartItem = mCartItemList.get(position);
-                modifyCountInterface.doDecrease(position, holder.amount, holder.checkBox.isChecked());//暴露删减接口
+                ToastUtils.showShort("sub");
+                //暴露增加接口
+                modifyCountInterface.doDecrease(position, holder.amount, holder.checkBox.isChecked());
 
             }
         });
         holder.cardView.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
-            public boolean onLongClick(View view) {
-                AlertDialog alert = new AlertDialog.Builder(mContext).create();
-                alert.setTitle("操作提示");
-                alert.setMessage("您确定要将这些商品从购物车中移除吗？");
-                alert.setButton(DialogInterface.BUTTON_NEGATIVE, "取消",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                return;
-                            }
-                        });
-                alert.setButton(DialogInterface.BUTTON_POSITIVE, "确定",
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                modifyCountInterface.childDelete(holder.getAdapterPosition());//删除 目前只是从item中移除
-                            }
-                        });
-                alert.show();
-                return false;
+            public boolean onLongClick(View v) {
+                int position = holder.getAdapterPosition();
+                CartItem mCartItem = mCartItemList.get(position);
+                //暴露删减接口
+                modifyCountInterface.childDelete(position);
+                return true;
+            }
+        });
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int position = holder.getAdapterPosition();
+                CartItem mCartItem = mCartItemList.get(position);
+                ARouter.getInstance().build(ConfigConstants.PRODUCT).withString("PID",mCartItem.getPID()).navigation(App.getContext(),new LoginNavigationCallbackImpl());
             }
         });
         return holder;
@@ -157,7 +161,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.ViewHolder>  {
         CartItem mCartItem = mCartItemList.get(position);
         holder.name.setText(mCartItem.getPName());
         holder.price.setText(""+mCartItem.getPrice());
-        holder.amount.setText("1");
+        holder.amount.setText(""+mCartItem.getAmount());
         holder.checkBox.setChecked(mCartItem.isChecked());
     }
 

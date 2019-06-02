@@ -103,7 +103,7 @@ public class ProductListActivity extends BaseActivity {
                         TextView product_comment_amount = itemView.findViewById(R.id.product_comment_amount);
                         TextView product_rate_goodcomment = itemView.findViewById(R.id.product_good_comment_rate);
                         CardView card_product = itemView.findViewById(R.id.card_product);
-                        product_title.setText(product.getTitle()+" "+product.getPName());
+                        product_title.setText(product.getPName());
                         //product_img
                         product_price.setText("￥"+product.getPrice());
                         product_comment_amount.setText(product.getComment()+"条评论");
@@ -123,11 +123,11 @@ public class ProductListActivity extends BaseActivity {
         });
         mRecyclerView.setAdapter(mOneAdapter);
         mRefreshLayout.setEnableRefresh(false);
-        mRefreshLayout.setEnableAutoLoadMore(true);
+        mRefreshLayout.setEnableAutoLoadMore(false);
         mRefreshLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(@NonNull RefreshLayout refreshLayout) {
-              RequestData(current_page);
+              //RequestData(current_page);
             }
         });
 

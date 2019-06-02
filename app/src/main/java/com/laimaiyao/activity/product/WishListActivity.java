@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.SPUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -22,6 +24,7 @@ import com.laimaiyao.activity.BaseActivity;
 import com.laimaiyao.adapter.OneAdapter;
 import com.laimaiyao.adapter.OneListener;
 import com.laimaiyao.adapter.OneViewHolder;
+import com.laimaiyao.interceptor.LoginNavigationCallbackImpl;
 import com.laimaiyao.model.Product;
 import com.laimaiyao.utils.ConfigConstants;
 import com.laimaiyao.utils.HttpUtil;
@@ -51,25 +54,28 @@ public class WishListActivity extends BaseActivity {
     private int MaxPage=0;
     private boolean noMoreData;
     private OneAdapter oneAdapter;
+    private ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wish_list);
-        initview(R.string.title_wish_list);
+        initview();
+        //InitData();
     }
-    public void initview(int title){
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //ToastUtils.showShort("再次刷新");
+        current_page=1;
+        progressBar.setVisibility(View.VISIBLE);
+        InitData();
+    }
+
+    public void initview(){
+        progressBar = findViewById(R.id.progressBar_wishList);
         toolbar = findViewById(R.id.wish_list_toolbar);
-        toolbar.setTitle(title);
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setHomeButtonEnabled(true);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        InitToolBar(toolbar,R.string.title_wish_list);
         refreshLayout = findViewById(R.id.rl_wish_list);
         recyclerView = findViewById(R.id.rv_wish_list);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -84,16 +90,17 @@ public class WishListActivity extends BaseActivity {
                 return new OneViewHolder<Product>(parent, R.layout.item_wish){
 
                     @Override
-                    protected void bindViewCasted(int position, Product product) {
-                        TextView product_name = itemView.findViewById(R.id.tv_commodity_name);
+                    protected void bindViewCasted(int position, final Product product) {
+                        TextView product_name = itemView.findViewById(R.id.tv_produce_name);
                         product_name.setText(product.getPName());
                         TextView product_price = itemView.findViewById(R.id.tv_product_price);
                         product_price.setText(product.getPrice());
                         CardView cardView = itemView.findViewById(R.id.CardView_wish);
-                        cardView.setOnLongClickListener(new View.OnLongClickListener() {
+                        cardView.setOnClickListener(new View.OnClickListener() {
                             @Override
-                            public boolean onLongClick(View v) {
-                                return false;
+                            public void onClick(View v) {
+                                ARouter.getInstance().build(ConfigConstants.PRODUCT).withString("PID",product.getPID()).navigation(App.getContext(),new LoginNavigationCallbackImpl());
+
                             }
                         });
                     }
@@ -111,8 +118,26 @@ public class WishListActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    private void InitData(){
+        progressBar.setVisibility(View.VISIBLE);
         getMaxPage();
     }
+    private void InitToolBar(Toolbar toolbar,int title){
+        toolbar.setTitle(title);
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setHomeButtonEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+    }
+
     private void requestData(final int page){
         if(HttpUtil.isNetworkAvailable(App.getContext())){
             Map<String, String> map=new HashMap<>();
@@ -124,6 +149,7 @@ public class WishListActivity extends BaseActivity {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     if(response.code()==200){
+                        progressBar.setVisibility(View.GONE);
                         if(page>=MaxPage){
                             noMoreData=true;
                         }
@@ -149,6 +175,7 @@ public class WishListActivity extends BaseActivity {
             });
         }
     }
+
     private void getMaxPage(){
         if(HttpUtil.isNetworkAvailable(App.getContext())){
             Map<String, String> map=new HashMap<>();
@@ -164,6 +191,7 @@ public class WishListActivity extends BaseActivity {
                             JSONObject jsonObject = new JSONObject(response.body());
                             MaxPage = jsonObject.getInt("maxpage");
                             if (current_page<=MaxPage){
+                                datas.clear();
                                 requestData(current_page);
                             }
                             else {
@@ -183,6 +211,5 @@ public class WishListActivity extends BaseActivity {
             });
         }
     }
-
 
 }

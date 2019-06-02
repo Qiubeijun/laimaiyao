@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
-import com.blankj.utilcode.util.ToastUtils;
 import com.laimaiyao.App;
 import com.laimaiyao.R;
 import com.laimaiyao.fragment.CartFragment;
@@ -95,7 +94,7 @@ public class MainActivity extends BaseActivity {
                         LastFragmentID = R.id.navigation_sort;
                         return true;
                     case R.id.navigation_cart:
-                        if (cartFragment == null) {
+                        /*if (cartFragment == null) {
                             ToastUtils.showShort("准备拦截");
                             cartFragment = (CartFragment) ARouter.getInstance().build(ConfigConstants.CART).navigation(App.getContext(),new LoginNavigationCallbackImpl());
                         }else if(LastFragmentID == R.id.navigation_cart){
@@ -103,7 +102,8 @@ public class MainActivity extends BaseActivity {
                         }
                         transaction.replace(R.id.tb, cartFragment);
                         transaction.commit();
-                        LastFragmentID = R.id.navigation_cart;
+                        LastFragmentID = R.id.navigation_cart;*/
+                        ARouter.getInstance().build(ConfigConstants.CART).navigation(App.getContext(),new LoginNavigationCallbackImpl());
                         return true;
                     case R.id.navigation_mine:
                         if (mineFragment == null)

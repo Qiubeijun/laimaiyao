@@ -27,4 +27,6 @@
     <string name="error_network_unavailable">网络不可用，请检查网络连接</string>
     <string name="title_settings">设置</string>
     <string name="bt_log_out">退出登录</string>
+    <string name="title_address">地址</string>
+    <string name="title_edit_address">修改地址</string>
 </resources>

@@ -37,6 +37,7 @@ public class LoginInterceptorImpl implements IInterceptor {
                 // 不需要登录的直接进入这个页面
                 case ConfigConstants.LOGIN:
                 case ConfigConstants.RESULT:
+                case ConfigConstants.PRODUCT:
                     callback.onContinue(postcard);
                     break;
                 default:

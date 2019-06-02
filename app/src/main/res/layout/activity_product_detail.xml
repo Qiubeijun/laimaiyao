@@ -8,7 +8,7 @@
     android:orientation="vertical"
     tools:context=".activity.product.ProductDetailActivity">
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_cart"
+        android:id="@+id/toolbar_detail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
@@ -18,19 +18,73 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:text="@string/title_cart"
+            android:text="商品详情"
             android:textSize="20sp"
             android:textColor="@color/black"/>
     </android.support.v7.widget.Toolbar>
 
-    <ScrollView
-        android:id="@+id/sv_detail"
+    <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
         android:layout_weight="1">
 
-    </ScrollView>
+        <ProgressBar
+            android:id="@+id/progressBar_Detail"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone"/>
+
+        <ScrollView
+            android:id="@+id/sv_detail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:src="@drawable/demo"
+                    android:scaleY="0.3"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="238dp">
+
+                    <TextView
+                        android:id="@+id/tv_detail_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:lines="2"
+                        android:maxWidth="300dp"
+                        android:text="三九感冒灵颗粒这个效果真的不错推荐大家去尝试一下哈哈哈哈哈"
+                        android:textColor="#000000"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tv_detail_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_detail_name"
+                        android:layout_alignParentStart="true"
+                        android:layout_marginStart="20dp"
+                        android:layout_marginTop="20dp"
+                        android:text="￥9.9"
+                        android:textColor="#FF4714"
+                        android:textSize="18sp" />
+                </RelativeLayout>
+
+            </LinearLayout>
+        </ScrollView>
+    </FrameLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -58,6 +112,7 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:id="@+id/img_icon_collect"
                     android:padding="5dp"
                     android:layout_gravity="center"
                     android:src="@drawable/icon_like">
@@ -74,7 +129,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:id="@+id/order_pay"
+                android:id="@+id/bt_cart"
                 android:layout_weight="1">
                 <ImageView
                     android:layout_width="30dp"
@@ -92,7 +147,7 @@
                     android:textSize="10sp"/>
             </LinearLayout>
             <TextView
-                android:id="@+id/tv_settlement"
+                android:id="@+id/tv_add_to_cart"
                 android:layout_width="60dp"
                 android:layout_height="match_parent"
                 android:background="@color/color_FF4714"

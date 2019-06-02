@@ -8,6 +8,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import com.alibaba.android.arouter.facade.annotation.Route;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.blankj.utilcode.util.SPUtils;
+import com.blankj.utilcode.util.ToastUtils;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.laimaiyao.App;
@@ -47,6 +49,8 @@ public class AddressManagementActivity extends AppCompatActivity {
     private OneAdapter AddressAdapter;
     private List<Address> addressList = new ArrayList<>();
     private ProgressBar progressBar;
+    private Button bt_address_add;
+    private int current_position;
 
 
     @Override
@@ -54,9 +58,18 @@ public class AddressManagementActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_address_management);
         InitView();
-        InitData();
+        //InitData();
     }
     void InitView(){
+        bt_address_add = findViewById(R.id.bt_address_add);
+        bt_address_add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ARouter.getInstance()
+                        .build(ConfigConstants.ADDRESSADD)
+                        .navigation(App.getContext(),new LoginNavigationCallbackImpl());
+            }
+        });
         toolbar_address = findViewById(R.id.toolbar_address);
         initToolBar(toolbar_address);
         recyclerView = findViewById(R.id.rv_address_list);
@@ -73,7 +86,8 @@ public class AddressManagementActivity extends AppCompatActivity {
                 return new OneViewHolder<Address>(parent, R.layout.item_address){
 
                     @Override
-                    protected void bindViewCasted(int position, final Address address) {
+                    protected void bindViewCasted(final int position, final Address address) {
+                        current_position = position;
                         TextView name = itemView.findViewById(R.id.address_item_name);
                         name.setText(address.getName());
                         TextView phone = itemView.findViewById(R.id.address_item_phone);
@@ -94,6 +108,14 @@ public class AddressManagementActivity extends AppCompatActivity {
                                         .navigation(App.getContext(),new LoginNavigationCallbackImpl());
                             }
                         });
+                        itemView.setOnLongClickListener(new View.OnLongClickListener() {
+                            @Override
+                            public boolean onLongClick(View v) {
+                                progressBar.setVisibility(View.VISIBLE);
+                                DelAddress();
+                                return true;
+                            }
+                        });
                     }
                 };
             }
@@ -103,7 +125,7 @@ public class AddressManagementActivity extends AppCompatActivity {
     }
     void InitData(){
         progressBar.setVisibility(View.VISIBLE);
-        getCart();
+        getAddress();
     }
     public void initToolBar(Toolbar toolbar){
         //toolbar.setTitle(title);
@@ -120,7 +142,7 @@ public class AddressManagementActivity extends AppCompatActivity {
         });
     }
 
-    private void getCart(){
+    private void getAddress(){
         if(HttpUtil.isNetworkAvailable(App.getContext())){
             Map<String, String> map=new HashMap<>();
             String UID = SPUtils.getInstance().getString("uid");
@@ -157,5 +179,49 @@ public class AddressManagementActivity extends AppCompatActivity {
                 }
             });
         }
+    }
+
+    private void DelAddress(){
+        if(HttpUtil.isNetworkAvailable(App.getContext())){
+            Map<String, String> map=new HashMap<>();
+            String UID = SPUtils.getInstance().getString("uid");
+            String token = SPUtils.getInstance().getString("token");
+            map.put("UID",UID);
+            map.put("AID",addressList.get(current_position).getAID()+"");
+
+            HttpUtil.postMethodWithToken("/address/delete", token, map, new Callback<String>() {
+                @Override
+                public void onResponse(Call<String> call, Response<String> response) {
+
+                    if(response.code()==200){
+                        addressList.remove(current_position);
+                        AddressAdapter.setData(addressList);
+                        progressBar.setVisibility(View.GONE);
+                        ToastUtils.showShort("删除成功");
+
+                    }
+                    else if (response.code()==300){
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(App.getContext(), "--"+response.body(), Toast.LENGTH_SHORT).show();
+                    }
+                    else if(response.code()==404){
+                        progressBar.setVisibility(View.GONE);
+                        Toast.makeText(App.getContext(), "--"+response.body(), Toast.LENGTH_SHORT).show();
+
+                    }
+                }
+                @Override
+                public void onFailure(Call<String> call, Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(App.getContext(), "--"+t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        InitData();
     }
 }

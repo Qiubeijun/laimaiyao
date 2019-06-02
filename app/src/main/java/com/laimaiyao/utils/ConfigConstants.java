@@ -22,6 +22,7 @@ public class ConfigConstants {
     public static final String ADDRESS = BASE_PATH + "/address";
     public static final String CART = BASE_PATH + "/cart";
     public static final String ADDRESSEDIT = BASE_PATH + "/addressedit";
+    public static final String ADDRESSADD = BASE_PATH + "/addressadd";
 
 
 

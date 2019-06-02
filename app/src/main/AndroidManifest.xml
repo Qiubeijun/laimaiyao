@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.address.AddressEditActivity"></activity>
+        <activity android:name=".activity.address.AddressAddActivity"></activity>
+        <activity android:name=".activity.address.AddressEditActivity" />
         <activity android:name=".activity.CartActivity" />
         <activity android:name=".activity.product.ProductDetailActivity" />
         <activity android:name=".activity.BaseActivity" />

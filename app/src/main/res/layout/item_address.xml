@@ -38,7 +38,7 @@
         android:layout_marginBottom="20dp"
         android:lines="2"
         android:maxWidth="250dp"
-        android:text="河南省兰考县南彰镇第一初级中学"
+        android:text="河南省兰考县南彰镇第一初级中学aaaaa"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

@@ -5,7 +5,7 @@
     android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar_address_edit"
+        android:id="@+id/toolbar_address_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:fitsSystemWindows="true">
@@ -16,12 +16,12 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:singleLine="true"
-            android:text="@string/title_edit_address"
+            android:text="添加"
             android:textColor="@color/black"
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tv_address_edit_save"
+            android:id="@+id/tv_address_add_save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="保存"
@@ -37,7 +37,7 @@
         android:layout_weight="1">
 
         <ProgressBar
-            android:id="@+id/progressBar_Address_Edit"
+            android:id="@+id/progressBar_Address_Add"
             style="?android:attr/progressBarStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -48,19 +48,19 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
             <EditText
-                android:id="@+id/edit_address_name"
+                android:id="@+id/edit_address_name_add"
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
             <EditText
-                android:id="@+id/edit_address_phone"
+                android:id="@+id/edit_address_phone_add"
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
             <EditText
-                android:id="@+id/edit_address_district"
+                android:id="@+id/edit_address_district_add"
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
             <EditText
-                android:id="@+id/edit_address_detail"
+                android:id="@+id/edit_address_detail_add"
                 android:layout_width="match_parent"
                 android:layout_height="50dp" />
         </LinearLayout>
